@@ -16,41 +16,27 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 7,
-  "iteration": 1580357278946,
+  "iteration": 1580360501946,
   "links": [],
   "panels": [
-    {
-      "collapsed": false,
-      "datasource": null,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 0
-      },
-      "id": 34,
-      "panels": [],
-      "title": "Wazuh Alerts",
-      "type": "row"
-    },
     {
       "circleMaxSize": 30,
       "circleMinSize": 2,
       "colors": [
-        "rgba(245, 54, 54, 0.9)",
+        "#73BF69",
         "rgba(237, 129, 40, 0.89)",
-        "rgba(50, 172, 45, 0.97)"
+        "#F2495C"
       ],
       "datasource": "Elasticsearch",
       "decimals": 0,
-      "esGeoPoint": "src_location",
-      "esLocationName": "data_srcip",
+      "esGeoPoint": "GeoLocation.location",
+      "esLocationName": "data.srcip",
       "esMetric": "Count",
       "gridPos": {
-        "h": 16,
-        "w": 12,
+        "h": 13,
+        "w": 18,
         "x": 0,
-        "y": 1
+        "y": 0
       },
       "hideEmpty": false,
       "hideZero": false,
@@ -58,19 +44,20 @@
       "initialZoom": 1,
       "links": [],
       "locationData": "geohash",
-      "mapCenter": "(0°, 0°)",
-      "mapCenterLatitude": 0,
-      "mapCenterLongitude": 0,
+      "mapCenter": "Europe",
+      "mapCenterLatitude": 46,
+      "mapCenterLongitude": 14,
       "maxDataPoints": 1,
-      "mouseWheelZoom": false,
+      "mouseWheelZoom": true,
       "options": {},
       "showLegend": true,
       "stickyLabels": true,
       "tableQueryOptions": {
-        "geohashField": "geohash",
-        "latitudeField": "latitude",
-        "longitudeField": "longitude",
-        "metricField": "metric",
+        "geohashField": "GeoLocation.location",
+        "labelField": "data.srcip",
+        "latitudeField": "GeoLocation.latitude",
+        "longitudeField": "GeoLocation.longitude",
+        "metricField": "data.srcip",
         "queryType": "geohash"
       },
       "targets": [
@@ -78,8 +65,8 @@
           "bucketAggs": [
             {
               "fake": true,
-              "field": "data_srcip",
-              "id": "4",
+              "field": "data.srcip",
+              "id": "5",
               "settings": {
                 "min_doc_count": 1,
                 "order": "desc",
@@ -90,8 +77,8 @@
             },
             {
               "fake": true,
-              "field": "src_location",
-              "id": "3",
+              "field": "GeoLocation.location",
+              "id": "4",
               "settings": {
                 "precision": 3
               },
@@ -121,7 +108,7 @@
           ],
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "agent_name:$agent  AND rule_level:$rulelevel",
+          "query": "agent.name:$agent  AND rule.level:$rulelevel AND GeoLocation.location:* AND data.srcip:*",
           "refId": "A",
           "resultFormat": "time_series",
           "select": [
@@ -139,727 +126,16 @@
             ]
           ],
           "tags": [],
-          "timeField": "real_timestamp"
+          "timeField": "@timestamp"
         }
       ],
-      "thresholds": "0,10",
+      "thresholds": "100,200",
+      "timeFrom": null,
       "title": "Wazuh Sources Ips",
       "type": "grafana-worldmap-panel",
       "unitPlural": "",
       "unitSingle": "",
       "valueName": "total"
-    },
-    {
-      "aliasColors": {},
-      "breakPoint": "50%",
-      "cacheTimeout": null,
-      "combine": {
-        "label": "Others",
-        "threshold": 0
-      },
-      "datasource": "Elasticsearch",
-      "fontSize": "80%",
-      "format": "none",
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 1
-      },
-      "id": 2,
-      "interval": null,
-      "legend": {
-        "percentage": false,
-        "show": true,
-        "sideWidth": null,
-        "sort": "total",
-        "sortDesc": true,
-        "values": true
-      },
-      "legendType": "Right side",
-      "links": [],
-      "maxDataPoints": 3,
-      "nullPointMode": "connected",
-      "options": {},
-      "pieType": "donut",
-      "strokeWidth": "1",
-      "targets": [
-        {
-          "bucketAggs": [
-            {
-              "fake": true,
-              "field": "rule_description",
-              "id": "3",
-              "settings": {
-                "min_doc_count": 1,
-                "order": "desc",
-                "orderBy": "_count",
-                "size": "10"
-              },
-              "type": "terms"
-            },
-            {
-              "field": "real_timestamp",
-              "id": "2",
-              "settings": {
-                "interval": "auto",
-                "min_doc_count": 0,
-                "trimEdges": 0
-              },
-              "type": "date_histogram"
-            }
-          ],
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "null"
-              ],
-              "type": "fill"
-            }
-          ],
-          "metrics": [
-            {
-              "field": "select field",
-              "id": "1",
-              "type": "count"
-            }
-          ],
-          "orderByTime": "ASC",
-          "policy": "default",
-          "query": "agent_name:$agent  AND rule_level:$rulelevel",
-          "refId": "A",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              }
-            ]
-          ],
-          "tags": [],
-          "timeField": "real_timestamp"
-        }
-      ],
-      "title": "Top Alerts",
-      "type": "grafana-piechart-panel",
-      "valueName": "total"
-    },
-    {
-      "aliasColors": {},
-      "breakPoint": "50%",
-      "cacheTimeout": null,
-      "combine": {
-        "label": "Others",
-        "threshold": 0
-      },
-      "datasource": "Elasticsearch",
-      "fontSize": "80%",
-      "format": "none",
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 9
-      },
-      "id": 21,
-      "interval": null,
-      "legend": {
-        "show": true,
-        "values": true
-      },
-      "legendType": "Right side",
-      "links": [],
-      "maxDataPoints": 3,
-      "nullPointMode": "connected",
-      "options": {},
-      "pieType": "pie",
-      "strokeWidth": 1,
-      "targets": [
-        {
-          "bucketAggs": [
-            {
-              "fake": true,
-              "field": "rule_groups",
-              "id": "3",
-              "settings": {
-                "min_doc_count": 1,
-                "order": "desc",
-                "orderBy": "_count",
-                "size": "10"
-              },
-              "type": "terms"
-            },
-            {
-              "field": "real_timestamp",
-              "id": "2",
-              "settings": {
-                "interval": "auto",
-                "min_doc_count": 0,
-                "trimEdges": 0
-              },
-              "type": "date_histogram"
-            }
-          ],
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "null"
-              ],
-              "type": "fill"
-            }
-          ],
-          "metrics": [
-            {
-              "field": "select field",
-              "id": "1",
-              "type": "count"
-            }
-          ],
-          "orderByTime": "ASC",
-          "policy": "default",
-          "query": "agent_name:$agent  AND rule_level:$rulelevel",
-          "refId": "A",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              }
-            ]
-          ],
-          "tags": [],
-          "timeField": "real_timestamp"
-        }
-      ],
-      "title": "Wazuh Rules BrakeDown",
-      "type": "grafana-piechart-panel",
-      "valueName": "total"
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "Elasticsearch",
-      "fill": 10,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 9,
-        "w": 12,
-        "x": 0,
-        "y": 17
-      },
-      "hiddenSeries": false,
-      "id": 25,
-      "legend": {
-        "alignAsTable": true,
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "rightSide": true,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "connected",
-      "options": {
-        "dataLinks": []
-      },
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "bucketAggs": [
-            {
-              "fake": true,
-              "field": "rule_level",
-              "id": "3",
-              "settings": {
-                "min_doc_count": 1,
-                "order": "desc",
-                "orderBy": "_count",
-                "size": "0"
-              },
-              "type": "terms"
-            },
-            {
-              "field": "real_timestamp",
-              "id": "2",
-              "settings": {
-                "interval": "auto",
-                "min_doc_count": 0,
-                "trimEdges": 0
-              },
-              "type": "date_histogram"
-            }
-          ],
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "null"
-              ],
-              "type": "fill"
-            }
-          ],
-          "metrics": [
-            {
-              "field": "select field",
-              "id": "1",
-              "type": "count"
-            }
-          ],
-          "orderByTime": "ASC",
-          "policy": "default",
-          "query": "agent_name:$agent  AND rule_level:$rulelevel",
-          "refId": "A",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              }
-            ]
-          ],
-          "tags": [],
-          "timeField": "real_timestamp"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Wazuh Rules Over time",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "none",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "breakPoint": "50%",
-      "cacheTimeout": null,
-      "combine": {
-        "label": "Others",
-        "threshold": 0
-      },
-      "datasource": "Elasticsearch",
-      "fontSize": "80%",
-      "format": "none",
-      "gridPos": {
-        "h": 9,
-        "w": 7,
-        "x": 12,
-        "y": 17
-      },
-      "id": 27,
-      "interval": null,
-      "legend": {
-        "show": true,
-        "values": true
-      },
-      "legendType": "Right side",
-      "links": [],
-      "maxDataPoints": 3,
-      "nullPointMode": "connected",
-      "options": {},
-      "pieType": "pie",
-      "strokeWidth": 1,
-      "targets": [
-        {
-          "bucketAggs": [
-            {
-              "fake": true,
-              "field": "rule_pci_dss",
-              "id": "3",
-              "settings": {
-                "min_doc_count": 1,
-                "order": "desc",
-                "orderBy": "_count",
-                "size": "10"
-              },
-              "type": "terms"
-            },
-            {
-              "field": "real_timestamp",
-              "id": "2",
-              "settings": {
-                "interval": "auto",
-                "min_doc_count": 0,
-                "trimEdges": 0
-              },
-              "type": "date_histogram"
-            }
-          ],
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "null"
-              ],
-              "type": "fill"
-            }
-          ],
-          "metrics": [
-            {
-              "field": "select field",
-              "id": "1",
-              "type": "count"
-            }
-          ],
-          "orderByTime": "ASC",
-          "policy": "default",
-          "query": "agent_name:$agent  AND rule_level:$rulelevel",
-          "refId": "A",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              }
-            ]
-          ],
-          "tags": [],
-          "timeField": "real_timestamp"
-        }
-      ],
-      "title": "Wazuh PC-DSS Controls",
-      "type": "grafana-piechart-panel",
-      "valueName": "total"
-    },
-    {
-      "columns": [],
-      "datasource": "Elasticsearch",
-      "fontSize": "100%",
-      "gridPos": {
-        "h": 9,
-        "w": 5,
-        "x": 19,
-        "y": 17
-      },
-      "id": 23,
-      "links": [],
-      "options": {},
-      "pageSize": 10,
-      "scroll": true,
-      "showHeader": true,
-      "sort": {
-        "col": 0,
-        "desc": true
-      },
-      "styles": [
-        {
-          "alias": "rule_level",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "decimals": null,
-          "pattern": "rule_level",
-          "thresholds": [],
-          "type": "number",
-          "unit": "none"
-        }
-      ],
-      "targets": [
-        {
-          "bucketAggs": [
-            {
-              "fake": true,
-              "field": "rule_level",
-              "id": "4",
-              "settings": {
-                "min_doc_count": 1,
-                "order": "desc",
-                "orderBy": "_count",
-                "size": "0"
-              },
-              "type": "terms"
-            },
-            {
-              "fake": true,
-              "field": "rule_firedtimes",
-              "id": "3",
-              "settings": {
-                "min_doc_count": 1,
-                "order": "desc",
-                "orderBy": "_count",
-                "size": "0"
-              },
-              "type": "terms"
-            }
-          ],
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "null"
-              ],
-              "type": "fill"
-            }
-          ],
-          "metrics": [
-            {
-              "field": "select field",
-              "id": "1",
-              "type": "count"
-            }
-          ],
-          "orderByTime": "ASC",
-          "policy": "default",
-          "query": "agent_name:$agent  AND rule_level:$rulelevel",
-          "refId": "A",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              }
-            ]
-          ],
-          "tags": [],
-          "timeField": "real_timestamp"
-        }
-      ],
-      "title": "Rules Fires",
-      "transform": "table",
-      "type": "table"
-    },
-    {
-      "columns": [],
-      "datasource": "Elasticsearch",
-      "fontSize": "100%",
-      "gridPos": {
-        "h": 10,
-        "w": 12,
-        "x": 0,
-        "y": 26
-      },
-      "id": 29,
-      "links": [],
-      "options": {},
-      "pageSize": 10,
-      "scroll": true,
-      "showHeader": true,
-      "sort": {
-        "col": 3,
-        "desc": true
-      },
-      "styles": [
-        {
-          "alias": "Counts",
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "pattern": "Count",
-          "type": "number",
-          "unit": "none"
-        },
-        {
-          "alias": "",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "decimals": 2,
-          "pattern": "/.*/",
-          "thresholds": [],
-          "type": "number",
-          "unit": "short"
-        }
-      ],
-      "targets": [
-        {
-          "bucketAggs": [
-            {
-              "fake": true,
-              "field": "rule_id",
-              "id": "4",
-              "settings": {
-                "min_doc_count": 1,
-                "order": "desc",
-                "orderBy": "_term",
-                "size": "0"
-              },
-              "type": "terms"
-            },
-            {
-              "fake": true,
-              "field": "rule_description",
-              "id": "5",
-              "settings": {
-                "min_doc_count": 1,
-                "order": "desc",
-                "orderBy": "_term",
-                "size": "0"
-              },
-              "type": "terms"
-            },
-            {
-              "fake": true,
-              "field": "rule_groups",
-              "id": "3",
-              "settings": {
-                "min_doc_count": 1,
-                "order": "desc",
-                "orderBy": "_term",
-                "size": "0"
-              },
-              "type": "terms"
-            }
-          ],
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "null"
-              ],
-              "type": "fill"
-            }
-          ],
-          "metrics": [
-            {
-              "field": "select field",
-              "id": "1",
-              "type": "count"
-            }
-          ],
-          "orderByTime": "ASC",
-          "policy": "default",
-          "query": "agent_name:$agent  AND rule_level:$rulelevel",
-          "refId": "A",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              }
-            ]
-          ],
-          "tags": [],
-          "timeField": "real_timestamp"
-        }
-      ],
-      "title": "Alert Sumary",
-      "transform": "table",
-      "type": "table"
     },
     {
       "columns": [
@@ -883,10 +159,10 @@
       "datasource": "Elasticsearch",
       "fontSize": "100%",
       "gridPos": {
-        "h": 10,
-        "w": 12,
-        "x": 12,
-        "y": 26
+        "h": 13,
+        "w": 6,
+        "x": 18,
+        "y": 0
       },
       "id": 53,
       "links": [],
@@ -954,7 +230,32 @@
       ],
       "targets": [
         {
-          "bucketAggs": [],
+          "bucketAggs": [
+            {
+              "fake": true,
+              "field": "data.srcip",
+              "id": "3",
+              "settings": {
+                "min_doc_count": 1,
+                "order": "desc",
+                "orderBy": "_term",
+                "size": "10"
+              },
+              "type": "terms"
+            },
+            {
+              "fake": true,
+              "field": "GeoLocation.city_name",
+              "id": "5",
+              "settings": {
+                "min_doc_count": 1,
+                "order": "desc",
+                "orderBy": "_term",
+                "size": "10"
+              },
+              "type": "terms"
+            }
+          ],
           "groupBy": [
             {
               "params": [
@@ -974,15 +275,13 @@
               "field": "select field",
               "id": "1",
               "meta": {},
-              "settings": {
-                "size": 100000
-              },
-              "type": "raw_document"
+              "settings": {},
+              "type": "count"
             }
           ],
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "agent_name:$agent  AND rule_level:$rulelevel  AND _exists_:data_srcip",
+          "query": "agent.name:$agent  AND rule.level:$rulelevel  AND _exists_:data.srcip",
           "refId": "A",
           "resultFormat": "time_series",
           "select": [
@@ -1000,11 +299,368 @@
             ]
           ],
           "tags": [],
-          "timeField": "real_timestamp"
+          "timeField": "@timestamp"
         }
       ],
       "title": "Event Sources IP",
-      "transform": "json",
+      "transform": "table",
+      "type": "table"
+    },
+    {
+      "aliasColors": {},
+      "breakPoint": "50%",
+      "cacheTimeout": null,
+      "combine": {
+        "label": "Others",
+        "threshold": 0
+      },
+      "datasource": "Elasticsearch",
+      "fontSize": "80%",
+      "format": "none",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 13
+      },
+      "id": 21,
+      "interval": null,
+      "legend": {
+        "show": true,
+        "values": true
+      },
+      "legendType": "Right side",
+      "links": [],
+      "maxDataPoints": 3,
+      "nullPointMode": "connected",
+      "options": {},
+      "pieType": "pie",
+      "strokeWidth": 1,
+      "targets": [
+        {
+          "bucketAggs": [
+            {
+              "fake": true,
+              "field": "rule.groups",
+              "id": "3",
+              "settings": {
+                "min_doc_count": 1,
+                "order": "desc",
+                "orderBy": "_count",
+                "size": "10"
+              },
+              "type": "terms"
+            },
+            {
+              "field": "@timestamp",
+              "id": "2",
+              "settings": {
+                "interval": "auto",
+                "min_doc_count": 0,
+                "trimEdges": 0
+              },
+              "type": "date_histogram"
+            }
+          ],
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "metrics": [
+            {
+              "field": "select field",
+              "id": "1",
+              "type": "count"
+            }
+          ],
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "agent.name:$agent  AND rule.level:$rulelevel",
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": [],
+          "timeField": "@timestamp"
+        }
+      ],
+      "title": "Wazuh Rules BrakeDown",
+      "type": "grafana-piechart-panel",
+      "valueName": "total"
+    },
+    {
+      "aliasColors": {},
+      "breakPoint": "50%",
+      "cacheTimeout": null,
+      "combine": {
+        "label": "Others",
+        "threshold": 0
+      },
+      "datasource": "Elasticsearch",
+      "fontSize": "80%",
+      "format": "none",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 13
+      },
+      "id": 2,
+      "interval": null,
+      "legend": {
+        "percentage": false,
+        "show": true,
+        "sideWidth": null,
+        "sort": "total",
+        "sortDesc": true,
+        "values": true
+      },
+      "legendType": "Right side",
+      "links": [],
+      "maxDataPoints": 3,
+      "nullPointMode": "connected",
+      "options": {},
+      "pieType": "donut",
+      "strokeWidth": "1",
+      "targets": [
+        {
+          "bucketAggs": [
+            {
+              "fake": true,
+              "field": "rule.description",
+              "id": "3",
+              "settings": {
+                "min_doc_count": 1,
+                "order": "desc",
+                "orderBy": "_count",
+                "size": "10"
+              },
+              "type": "terms"
+            },
+            {
+              "field": "@timestamp",
+              "id": "2",
+              "settings": {
+                "interval": "auto",
+                "min_doc_count": 0,
+                "trimEdges": 0
+              },
+              "type": "date_histogram"
+            }
+          ],
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "metrics": [
+            {
+              "field": "select field",
+              "id": "1",
+              "type": "count"
+            }
+          ],
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "agent.name:$agent  AND rule.level:$rulelevel",
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": [],
+          "timeField": "@timestamp"
+        }
+      ],
+      "title": "Top Alerts",
+      "type": "grafana-piechart-panel",
+      "valueName": "total"
+    },
+    {
+      "collapsed": false,
+      "datasource": "Elasticsearch",
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 21
+      },
+      "id": 34,
+      "panels": [],
+      "title": "Wazuh Alerts",
+      "type": "row"
+    },
+    {
+      "columns": [],
+      "datasource": "Elasticsearch",
+      "fontSize": "100%",
+      "gridPos": {
+        "h": 10,
+        "w": 12,
+        "x": 0,
+        "y": 22
+      },
+      "id": 29,
+      "links": [],
+      "options": {},
+      "pageSize": 10,
+      "scroll": true,
+      "showHeader": true,
+      "sort": {
+        "col": 3,
+        "desc": true
+      },
+      "styles": [
+        {
+          "alias": "Counts",
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "pattern": "Count",
+          "type": "number",
+          "unit": "none"
+        },
+        {
+          "alias": "",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "decimals": 2,
+          "pattern": "/.*/",
+          "thresholds": [],
+          "type": "number",
+          "unit": "short"
+        }
+      ],
+      "targets": [
+        {
+          "bucketAggs": [
+            {
+              "fake": true,
+              "field": "rule.id",
+              "id": "4",
+              "settings": {
+                "min_doc_count": 1,
+                "order": "desc",
+                "orderBy": "_term",
+                "size": "0"
+              },
+              "type": "terms"
+            },
+            {
+              "fake": true,
+              "field": "rule.description",
+              "id": "5",
+              "settings": {
+                "min_doc_count": 1,
+                "order": "desc",
+                "orderBy": "_term",
+                "size": "0"
+              },
+              "type": "terms"
+            },
+            {
+              "fake": true,
+              "field": "rule.groups",
+              "id": "3",
+              "settings": {
+                "min_doc_count": 1,
+                "order": "desc",
+                "orderBy": "_term",
+                "size": "0"
+              },
+              "type": "terms"
+            }
+          ],
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "metrics": [
+            {
+              "field": "select field",
+              "id": "1",
+              "type": "count"
+            }
+          ],
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "agent.name:$agent  AND rule.level:$rulelevel",
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": [],
+          "timeField": "@timestamp"
+        }
+      ],
+      "title": "Alert Sumary",
+      "transform": "table",
       "type": "table"
     },
     {
@@ -1025,10 +681,10 @@
       "datasource": "Elasticsearch",
       "fontSize": "100%",
       "gridPos": {
-        "h": 10,
-        "w": 24,
-        "x": 0,
-        "y": 36
+        "h": 13,
+        "w": 12,
+        "x": 12,
+        "y": 22
       },
       "id": 54,
       "links": [],
@@ -1096,7 +752,44 @@
       ],
       "targets": [
         {
-          "bucketAggs": [],
+          "bucketAggs": [
+            {
+              "fake": true,
+              "field": "@timestamp",
+              "id": "3",
+              "settings": {
+                "min_doc_count": 1,
+                "order": "desc",
+                "orderBy": "_term",
+                "size": "10"
+              },
+              "type": "terms"
+            },
+            {
+              "fake": true,
+              "field": "agent.name",
+              "id": "4",
+              "settings": {
+                "min_doc_count": 1,
+                "order": "desc",
+                "orderBy": "_term",
+                "size": "10"
+              },
+              "type": "terms"
+            },
+            {
+              "fake": true,
+              "field": "rule.description",
+              "id": "5",
+              "settings": {
+                "min_doc_count": 1,
+                "order": "desc",
+                "orderBy": "_term",
+                "size": "10"
+              },
+              "type": "terms"
+            }
+          ],
           "groupBy": [
             {
               "params": [
@@ -1116,15 +809,13 @@
               "field": "select field",
               "id": "1",
               "meta": {},
-              "settings": {
-                "size": 1000000
-              },
-              "type": "raw_document"
+              "settings": {},
+              "type": "count"
             }
           ],
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "agent_name:$agent  AND rule_level:$rulelevel",
+          "query": "agent.name:$agent  AND rule.level:$rulelevel",
           "refId": "A",
           "resultFormat": "time_series",
           "select": [
@@ -1142,26 +833,549 @@
             ]
           ],
           "tags": [],
-          "timeField": "real_timestamp"
+          "timeField": "@timestamp"
         }
       ],
       "title": "Events  Details",
-      "transform": "json",
+      "transform": "table",
       "type": "table"
     },
     {
-      "collapsed": true,
-      "datasource": null,
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "Elasticsearch",
+      "fill": 10,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 12,
+        "w": 12,
+        "x": 0,
+        "y": 32
+      },
+      "hiddenSeries": false,
+      "id": 25,
+      "legend": {
+        "alignAsTable": true,
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "rightSide": true,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "connected",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "bucketAggs": [
+            {
+              "fake": true,
+              "field": "rule.level",
+              "id": "3",
+              "settings": {
+                "min_doc_count": 1,
+                "order": "desc",
+                "orderBy": "_count",
+                "size": "0"
+              },
+              "type": "terms"
+            },
+            {
+              "field": "@timestamp",
+              "id": "2",
+              "settings": {
+                "interval": "auto",
+                "min_doc_count": 0,
+                "trimEdges": 0
+              },
+              "type": "date_histogram"
+            }
+          ],
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "metrics": [
+            {
+              "field": "select field",
+              "id": "1",
+              "type": "count"
+            }
+          ],
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "agent.name:$agent  AND rule.level:$rulelevel",
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": [],
+          "timeField": "@timestamp"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Wazuh Rules Over time",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "none",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "breakPoint": "50%",
+      "cacheTimeout": null,
+      "combine": {
+        "label": "Others",
+        "threshold": 0
+      },
+      "datasource": "Elasticsearch",
+      "fontSize": "80%",
+      "format": "none",
+      "gridPos": {
+        "h": 9,
+        "w": 6,
+        "x": 12,
+        "y": 35
+      },
+      "id": 27,
+      "interval": null,
+      "legend": {
+        "show": true,
+        "values": true
+      },
+      "legendType": "Right side",
+      "links": [],
+      "maxDataPoints": 3,
+      "nullPointMode": "connected",
+      "options": {},
+      "pieType": "pie",
+      "strokeWidth": 1,
+      "targets": [
+        {
+          "bucketAggs": [
+            {
+              "fake": true,
+              "field": "rule.pci_dss",
+              "id": "3",
+              "settings": {
+                "min_doc_count": 1,
+                "order": "desc",
+                "orderBy": "_count",
+                "size": "10"
+              },
+              "type": "terms"
+            },
+            {
+              "field": "@timestamp",
+              "id": "2",
+              "settings": {
+                "interval": "auto",
+                "min_doc_count": 0,
+                "trimEdges": 0
+              },
+              "type": "date_histogram"
+            }
+          ],
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "metrics": [
+            {
+              "field": "select field",
+              "id": "1",
+              "type": "count"
+            }
+          ],
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "agent.name:$agent  AND rule.level:$rulelevel",
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": [],
+          "timeField": "@timestamp"
+        }
+      ],
+      "title": "Wazuh PC-DSS Controls",
+      "type": "grafana-piechart-panel",
+      "valueName": "total"
+    },
+    {
+      "columns": [],
+      "datasource": "Elasticsearch",
+      "fontSize": "100%",
+      "gridPos": {
+        "h": 9,
+        "w": 6,
+        "x": 18,
+        "y": 35
+      },
+      "id": 23,
+      "links": [],
+      "options": {},
+      "pageSize": 10,
+      "scroll": true,
+      "showHeader": true,
+      "sort": {
+        "col": 0,
+        "desc": true
+      },
+      "styles": [
+        {
+          "alias": "rule_level",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "decimals": null,
+          "pattern": "rule_level",
+          "thresholds": [],
+          "type": "number",
+          "unit": "none"
+        }
+      ],
+      "targets": [
+        {
+          "bucketAggs": [
+            {
+              "fake": true,
+              "field": "rule.level",
+              "id": "4",
+              "settings": {
+                "min_doc_count": 1,
+                "order": "desc",
+                "orderBy": "_count",
+                "size": "0"
+              },
+              "type": "terms"
+            },
+            {
+              "fake": true,
+              "field": "rule.firedtimes",
+              "id": "3",
+              "settings": {
+                "min_doc_count": 1,
+                "order": "desc",
+                "orderBy": "_count",
+                "size": "0"
+              },
+              "type": "terms"
+            }
+          ],
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "metrics": [
+            {
+              "field": "select field",
+              "id": "1",
+              "type": "count"
+            }
+          ],
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "agent.name:$agent  AND rule.level:$rulelevel",
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": [],
+          "timeField": "@timestamp"
+        }
+      ],
+      "title": "Rules Fires",
+      "transform": "table",
+      "type": "table"
+    },
+    {
+      "collapsed": false,
+      "datasource": "Elasticsearch",
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 46
+        "y": 44
       },
       "id": 36,
       "panels": [],
       "title": "File Integrity",
       "type": "row"
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "Elasticsearch",
+      "decimals": 0,
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 7,
+        "w": 24,
+        "x": 0,
+        "y": 45
+      },
+      "hiddenSeries": false,
+      "id": 43,
+      "legend": {
+        "alignAsTable": true,
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "rightSide": true,
+        "show": true,
+        "total": true,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "bucketAggs": [
+            {
+              "fake": true,
+              "field": "syscheck.event",
+              "id": "3",
+              "settings": {
+                "min_doc_count": 1,
+                "order": "desc",
+                "orderBy": "_count",
+                "size": "0"
+              },
+              "type": "terms"
+            },
+            {
+              "field": "@timestamp",
+              "id": "2",
+              "settings": {
+                "interval": "auto",
+                "min_doc_count": 0,
+                "trimEdges": 0
+              },
+              "type": "date_histogram"
+            }
+          ],
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "metrics": [
+            {
+              "field": "select field",
+              "id": "1",
+              "type": "count"
+            }
+          ],
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "agent.name:$agent",
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": [],
+          "timeField": "@timestamp"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "File integrity over time",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "none",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "none",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
     },
     {
       "cacheTimeout": null,
@@ -1185,7 +1399,7 @@
         "h": 3,
         "w": 5,
         "x": 0,
-        "y": 47
+        "y": 52
       },
       "id": 45,
       "interval": null,
@@ -1228,7 +1442,7 @@
           "bucketAggs": [
             {
               "fake": true,
-              "field": "syscheck_event",
+              "field": "syscheck.event",
               "id": "3",
               "settings": {
                 "min_doc_count": 1,
@@ -1262,7 +1476,7 @@
           ],
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "syscheck_event:added AND agent_name:$agent",
+          "query": "syscheck.event:added AND agent.name:$agent",
           "refId": "A",
           "resultFormat": "time_series",
           "select": [
@@ -1280,7 +1494,7 @@
             ]
           ],
           "tags": [],
-          "timeField": "real_timestamp"
+          "timeField": "@timestamp"
         }
       ],
       "thresholds": "",
@@ -1318,7 +1532,7 @@
         "h": 3,
         "w": 5,
         "x": 5,
-        "y": 47
+        "y": 52
       },
       "id": 46,
       "interval": null,
@@ -1361,7 +1575,7 @@
           "bucketAggs": [
             {
               "fake": true,
-              "field": "syscheck_event",
+              "field": "syscheck.event",
               "id": "3",
               "settings": {
                 "min_doc_count": 1,
@@ -1395,7 +1609,7 @@
           ],
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "syscheck_event:modified AND agent_name:$agent",
+          "query": "syscheck.event:modified AND agent.name:$agent",
           "refId": "A",
           "resultFormat": "time_series",
           "select": [
@@ -1413,7 +1627,7 @@
             ]
           ],
           "tags": [],
-          "timeField": "real_timestamp"
+          "timeField": "@timestamp"
         }
       ],
       "thresholds": "",
@@ -1451,7 +1665,7 @@
         "h": 3,
         "w": 5,
         "x": 10,
-        "y": 47
+        "y": 52
       },
       "id": 47,
       "interval": null,
@@ -1494,7 +1708,7 @@
           "bucketAggs": [
             {
               "fake": true,
-              "field": "syscheck_event",
+              "field": "syscheck.event",
               "id": "3",
               "settings": {
                 "min_doc_count": 1,
@@ -1528,7 +1742,7 @@
           ],
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "syscheck_event:deleted AND agent_name:$agent",
+          "query": "syscheck.event:deleted AND agent.name:$agent",
           "refId": "A",
           "resultFormat": "time_series",
           "select": [
@@ -1546,7 +1760,7 @@
             ]
           ],
           "tags": [],
-          "timeField": "real_timestamp"
+          "timeField": "@timestamp"
         }
       ],
       "thresholds": "",
@@ -1584,7 +1798,7 @@
         "h": 3,
         "w": 5,
         "x": 15,
-        "y": 47
+        "y": 52
       },
       "id": 49,
       "interval": null,
@@ -1621,12 +1835,12 @@
         "lineColor": "rgb(31, 120, 193)",
         "show": false
       },
-      "tableColumn": "syscheck_uname_after",
+      "tableColumn": "syscheck.uname_after",
       "targets": [
         {
           "bucketAggs": [
             {
-              "field": "syscheck_uname_after",
+              "field": "syscheck.uname_after",
               "id": "2",
               "settings": {
                 "min_doc_count": 1,
@@ -1677,7 +1891,7 @@
             ]
           ],
           "tags": [],
-          "timeField": "real_timestamp"
+          "timeField": "@timestamp"
         }
       ],
       "thresholds": "",
@@ -1691,7 +1905,7 @@
           "value": "null"
         }
       ],
-      "valueName": "avg"
+      "valueName": "first"
     },
     {
       "cacheTimeout": null,
@@ -1715,7 +1929,7 @@
         "h": 6,
         "w": 4,
         "x": 20,
-        "y": 47
+        "y": 52
       },
       "id": 52,
       "interval": null,
@@ -1752,12 +1966,12 @@
         "lineColor": "rgb(31, 120, 193)",
         "show": false
       },
-      "tableColumn": "syscheck_perm_after",
+      "tableColumn": "syscheck.perm_after",
       "targets": [
         {
           "bucketAggs": [
             {
-              "field": "syscheck_perm_after",
+              "field": "syscheck.perm_after",
               "id": "2",
               "settings": {
                 "min_doc_count": 1,
@@ -1808,7 +2022,7 @@
             ]
           ],
           "tags": [],
-          "timeField": "real_timestamp"
+          "timeField": "@timestamp"
         }
       ],
       "thresholds": "",
@@ -1846,7 +2060,7 @@
         "h": 3,
         "w": 5,
         "x": 0,
-        "y": 50
+        "y": 55
       },
       "id": 39,
       "interval": null,
@@ -1883,13 +2097,13 @@
         "lineColor": "rgb(31, 120, 193)",
         "show": false
       },
-      "tableColumn": "syscheck_path",
+      "tableColumn": "syscheck.path",
       "targets": [
         {
           "bucketAggs": [
             {
               "fake": true,
-              "field": "syscheck_path",
+              "field": "syscheck.path",
               "id": "6",
               "settings": {
                 "min_doc_count": 1,
@@ -1923,7 +2137,7 @@
           ],
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "syscheck_event:added AND agent_name:$agent",
+          "query": "syscheck.event:added AND agent.name:$agent",
           "refId": "A",
           "resultFormat": "time_series",
           "select": [
@@ -1941,7 +2155,7 @@
             ]
           ],
           "tags": [],
-          "timeField": "real_timestamp"
+          "timeField": "@timestamp"
         }
       ],
       "thresholds": "",
@@ -1955,7 +2169,7 @@
           "value": "null"
         }
       ],
-      "valueName": "total"
+      "valueName": "first"
     },
     {
       "cacheTimeout": null,
@@ -1979,7 +2193,7 @@
         "h": 3,
         "w": 5,
         "x": 5,
-        "y": 50
+        "y": 55
       },
       "id": 38,
       "interval": null,
@@ -2016,13 +2230,13 @@
         "lineColor": "rgb(31, 120, 193)",
         "show": false
       },
-      "tableColumn": "syscheck_path",
+      "tableColumn": "syscheck.path",
       "targets": [
         {
           "bucketAggs": [
             {
               "fake": true,
-              "field": "syscheck_path",
+              "field": "syscheck.path",
               "id": "3",
               "settings": {
                 "min_doc_count": 1,
@@ -2056,7 +2270,7 @@
           ],
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "syscheck_event:modified AND agent_name:$agent",
+          "query": "syscheck.event:modified AND agent.name:$agent",
           "refId": "A",
           "resultFormat": "time_series",
           "select": [
@@ -2074,7 +2288,7 @@
             ]
           ],
           "tags": [],
-          "timeField": "real_timestamp"
+          "timeField": "@timestamp"
         }
       ],
       "thresholds": "",
@@ -2112,7 +2326,7 @@
         "h": 3,
         "w": 5,
         "x": 10,
-        "y": 50
+        "y": 55
       },
       "id": 40,
       "interval": null,
@@ -2155,7 +2369,7 @@
           "bucketAggs": [
             {
               "fake": true,
-              "field": "syscheck_path",
+              "field": "syscheck.path",
               "id": "3",
               "settings": {
                 "min_doc_count": 1,
@@ -2189,7 +2403,7 @@
           ],
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "syscheck_event:deleted AND agent_name:$agent",
+          "query": "syscheck.event:deleted AND agent.name:$agent",
           "refId": "A",
           "resultFormat": "time_series",
           "select": [
@@ -2207,7 +2421,7 @@
             ]
           ],
           "tags": [],
-          "timeField": "real_timestamp"
+          "timeField": "@timestamp"
         }
       ],
       "thresholds": "",
@@ -2245,7 +2459,7 @@
         "h": 3,
         "w": 5,
         "x": 15,
-        "y": 50
+        "y": 55
       },
       "id": 50,
       "interval": null,
@@ -2282,12 +2496,12 @@
         "lineColor": "rgb(31, 120, 193)",
         "show": false
       },
-      "tableColumn": "syscheck_gname_after",
+      "tableColumn": "syscheck.gname_after",
       "targets": [
         {
           "bucketAggs": [
             {
-              "field": "syscheck_gname_after",
+              "field": "syscheck.gname_after",
               "id": "2",
               "settings": {
                 "min_doc_count": 1,
@@ -2338,7 +2552,7 @@
             ]
           ],
           "tags": [],
-          "timeField": "real_timestamp"
+          "timeField": "@timestamp"
         }
       ],
       "thresholds": "",
@@ -2352,272 +2566,10 @@
           "value": "null"
         }
       ],
-      "valueName": "avg"
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "Elasticsearch",
-      "decimals": 0,
-      "fill": 1,
-      "gridPos": {
-        "h": 9,
-        "w": 12,
-        "x": 0,
-        "y": 53
-      },
-      "id": 43,
-      "legend": {
-        "alignAsTable": true,
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "rightSide": true,
-        "show": true,
-        "total": true,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "null",
-      "options": {},
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "bucketAggs": [
-            {
-              "fake": true,
-              "field": "syscheck_event",
-              "id": "3",
-              "settings": {
-                "min_doc_count": 1,
-                "order": "desc",
-                "orderBy": "_count",
-                "size": "0"
-              },
-              "type": "terms"
-            },
-            {
-              "field": "real_timestamp",
-              "id": "2",
-              "settings": {
-                "interval": "auto",
-                "min_doc_count": 0,
-                "trimEdges": 0
-              },
-              "type": "date_histogram"
-            }
-          ],
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "null"
-              ],
-              "type": "fill"
-            }
-          ],
-          "metrics": [
-            {
-              "field": "select field",
-              "id": "1",
-              "type": "count"
-            }
-          ],
-          "orderByTime": "ASC",
-          "policy": "default",
-          "query": "agent_name:$agent",
-          "refId": "A",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              }
-            ]
-          ],
-          "tags": [],
-          "timeField": "real_timestamp"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "File integrity over time",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "none",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "none",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "columns": [
-        {
-          "text": "real_timestamp",
-          "value": "real_timestamp"
-        },
-        {
-          "text": "agent_name",
-          "value": "agent_name"
-        },
-        {
-          "text": "syscheck_event",
-          "value": "syscheck_event"
-        },
-        {
-          "text": "syscheck_path",
-          "value": "syscheck_path"
-        }
-      ],
-      "datasource": "Elasticsearch",
-      "fontSize": "100%",
-      "gridPos": {
-        "h": 9,
-        "w": 12,
-        "x": 12,
-        "y": 53
-      },
-      "id": 55,
-      "links": [],
-      "options": {},
-      "pageSize": 10,
-      "scroll": true,
-      "showHeader": true,
-      "sort": {
-        "col": null,
-        "desc": false
-      },
-      "styles": [
-        {
-          "alias": "Time",
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "pattern": "real_timestamp",
-          "type": "date"
-        },
-        {
-          "alias": "",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "decimals": 2,
-          "pattern": "/.*/",
-          "thresholds": [],
-          "type": "number",
-          "unit": "short"
-        }
-      ],
-      "targets": [
-        {
-          "bucketAggs": [],
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "null"
-              ],
-              "type": "fill"
-            }
-          ],
-          "metrics": [
-            {
-              "field": "select field",
-              "id": "1",
-              "meta": {},
-              "settings": {
-                "size": 1000000
-              },
-              "type": "raw_document"
-            }
-          ],
-          "orderByTime": "ASC",
-          "policy": "default",
-          "query": "agent_name:$agent AND _exists_:syscheck_event",
-          "refId": "A",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              }
-            ]
-          ],
-          "tags": [],
-          "timeField": "real_timestamp"
-        }
-      ],
-      "title": "File integrity real time",
-      "transform": "json",
-      "type": "table"
+      "valueName": "first"
     }
   ],
+  "refresh": false,
   "schemaVersion": 21,
   "style": "dark",
   "tags": [],
@@ -2626,20 +2578,18 @@
       {
         "allValue": null,
         "current": {
-          "isNone": true,
-          "selected": false,
-          "text": "None",
-          "value": ""
+          "text": "wazuh-manager-master-0",
+          "value": "wazuh-manager-master-0"
         },
         "datasource": "Elasticsearch",
-        "definition": "",
+        "definition": "{\"find\": \"terms\", \"field\":\"agent.name\",\"size\": \"1000000\" }",
         "hide": 0,
         "includeAll": false,
         "label": "Agent",
         "multi": false,
         "name": "agent",
         "options": [],
-        "query": "{\"find\": \"terms\", \"field\":\"agent_name\",\"size\": \"1000000\" }",
+        "query": "{\"find\": \"terms\", \"field\":\"agent.name\",\"size\": \"1000000\" }",
         "refresh": 2,
         "regex": "",
         "skipUrlSync": false,
@@ -2658,14 +2608,14 @@
           "value": "$__all"
         },
         "datasource": "Elasticsearch",
-        "definition": "",
+        "definition": "{\"find\": \"terms\", \"field\":\"rule.level\",\"query\":\"agent.name:$agent\",\"size\": \"1000000\" }",
         "hide": 0,
         "includeAll": true,
         "label": "Rules Level",
         "multi": true,
         "name": "rulelevel",
         "options": [],
-        "query": "{\"find\": \"terms\", \"field\":\"rule_level\",\"query\":\"agent_name:$agent\",\"size\": \"1000000\" }",
+        "query": "{\"find\": \"terms\", \"field\":\"rule.level\",\"query\":\"agent.name:$agent\",\"size\": \"1000000\" }",
         "refresh": 2,
         "regex": "",
         "skipUrlSync": false,
@@ -2708,7 +2658,7 @@
     ]
   },
   "timezone": "",
-  "title": "Wazuh",
+  "title": "wazuh",
   "uid": "v_vmjK7ik",
-  "version": 1
+  "version": 3
 }
