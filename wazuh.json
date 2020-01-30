@@ -15,8 +15,8 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 7,
-  "iteration": 1580360501946,
+  "id": 8,
+  "iteration": 1580383358203,
   "links": [],
   "panels": [
     {
@@ -2572,7 +2572,9 @@
   "refresh": false,
   "schemaVersion": 21,
   "style": "dark",
-  "tags": [],
+  "tags": [
+    "wazuh"
+  ],
   "templating": {
     "list": [
       {
@@ -2660,5 +2662,5 @@
   "timezone": "",
   "title": "wazuh",
   "uid": "v_vmjK7ik",
-  "version": 3
+  "version": 2
 }
